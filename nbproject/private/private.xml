@@ -3,8 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/FPTUniversity/2024.Summer/PRJ301/PRJ301_LaziFood/web/login.jsp</file>
-            <file>file:/D:/FPTUniversity/2024.Summer/PRJ301/PRJ301_LaziFood/src/java/filters/DispatchController.java</file>
+            <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/src/java/controller/LoginServlet.java</file>
+            <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/web/login.jsp</file>
+            <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/src/java/filters/DispatchController.java</file>
+            <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/web/login.html</file>
         </group>
     </open-files>
 </project-private>
