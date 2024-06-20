@@ -9,12 +9,17 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Properties;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse; 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  *
@@ -104,8 +109,29 @@ public class DispatchController implements Filter {
         
         doBeforeProcessing(request, response);
         
+        
+        HttpServletRequest req = (HttpServletRequest)request;
+        String uri = req.getRequestURI();
+        String url;
         Throwable problem = null;
         try {
+            // get site map
+            ServletContext context = request.getServletContext();
+            Properties siteMap =
+                    (Properties) context.getAttribute("SITE_MAP");
+            //get resource name
+            int lastIndex = uri.lastIndexOf("/");
+            String resource = uri.substring(lastIndex + 1);
+            //get site mapping
+            url = siteMap.getProperty(resource);
+            if (url != null) {
+                RequestDispatcher rd = req.getRequestDispatcher(url);
+                rd.forward(request, response);
+            }
+            else {
+                RequestDispatcher rd = req.getRequestDispatcher("login.html");
+                rd.forward(request, response);
+            }
             chain.doFilter(request, response);
         } catch (Throwable t) {
             // If an exception is thrown somewhere down the filter chain,
