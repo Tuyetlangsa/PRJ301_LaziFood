@@ -16,14 +16,15 @@ import utils.DBUtil;
  * @author long
  */
 public class AccountDAO {
-    public AccountDTO getAccount(String username, String password) throws SQLException{
+
+    public AccountDTO getAccount(String username, String password) throws SQLException {
         Connection cn = null;
         AccountDTO acc = null;
         PreparedStatement ps = null;
         ResultSet rs = null;
         try {
             cn = DBUtil.makeConnection();
-            if (cn != null){
+            if (cn != null) {
                 String sql = "Select [id], [username], [full_name], [phone], "
                         + "[address], [city_id], [district_id], [role], [status]"
                         + "from Accounts where [username] = ? and [password] = ?";
@@ -31,7 +32,7 @@ public class AccountDAO {
                 ps.setString(1, username);
                 ps.setString(2, password);
                 rs = ps.executeQuery();
-                if (rs.next()){
+                if (rs.next()) {
                     int id = rs.getInt("id");
                     String fullname = rs.getString("full_name");
                     String phone = rs.getString("phone");
@@ -45,8 +46,7 @@ public class AccountDAO {
             }
         } catch (Exception e) {
             e.printStackTrace();
-        }
-        finally{
+        } finally {
             if (rs != null) {
                 rs.close();
             }
@@ -56,8 +56,42 @@ public class AccountDAO {
             if (cn != null) {
                 cn.close();
             }
-        }     
+        }
         return acc;
     }
-    
+
+    public boolean
+            insertAccount(String userName, String passWord, String fullName, String email, String phone) throws SQLException {
+        Connection cn = null;
+        PreparedStatement stm = null;
+        try {
+            cn = DBUtil.makeConnection();
+            if (cn != null) {
+                String sql = "Insert into [dbo].[Accounts]([username], "
+                        + "[password], [full_name], [phone], [email]) "
+                        + "Values(?, ?, ?, ?, ?)";
+                stm = cn.prepareStatement(sql);
+                stm.setString(1, userName);
+                stm.setString(2, passWord);
+                stm.setString(3, fullName);
+                stm.setString(4, phone);
+                stm.setString(5, email);
+                int row = stm.executeUpdate();
+                if (row > 0) {
+                    return true;
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            if (stm != null) {
+                stm.close();
+            }
+            if (cn != null) {
+                cn.close();
+            }
+        }
+        return false;
+    }
+
 }

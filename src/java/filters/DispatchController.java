@@ -20,6 +20,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse; 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  *
@@ -129,8 +130,7 @@ public class DispatchController implements Filter {
                 rd.forward(request, response);
             }
             else {
-                RequestDispatcher rd = req.getRequestDispatcher("login.html");
-                rd.forward(request, response);
+                ((HttpServletResponse) response).sendRedirect("homePage");
             }
             chain.doFilter(request, response);
         } catch (Throwable t) {
