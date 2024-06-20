@@ -26,15 +26,20 @@ public class ContextListener implements ServletContextListener {
                 context.getInitParameter("SITEMAP_PROPERTIES_FILE_LOCATION");
         String authentication = 
                 context.getInitParameter("AUTHENTICATION_PROPERTIES_FILE_LOCATION");
+        String role = 
+                context.getInitParameter("ROLE_PROPERTIES_FILE_LOCATION");
         // load các file properties lên bằng cách dùng PropertiesFileUtil
         Properties siteMapProperty = 
                 PropertiesFileUtil.getProperties(context,siteMapLocation);
         Properties authenticationProperty = 
                 PropertiesFileUtil.getProperties(context,authentication);
+        Properties roleProperty = 
+                PropertiesFileUtil.getProperties(context,role);
         // set các properties object vào vùng nhớ context scope để cho các resource 
         // có thể reference 
         context.setAttribute("SITE_MAP", siteMapProperty);
         context.setAttribute("AUTHENTICATION_LIST", authenticationProperty);
+        context.setAttribute("ROLE", roleProperty);
     }
 
     @Override

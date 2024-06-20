@@ -17,31 +17,34 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse; 
-import javax.servlet.http.HttpServlet;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import table.accounts.AccountDTO;
 
 /**
  *
- * @author Kim Nha
+ * @author long
  */
-public class DispatchController implements Filter {
-    
+@WebFilter(filterName = "RoleFilter", urlPatterns = {"/*"})
+public class RoleFilter implements Filter {
+
     private static final boolean debug = true;
 
     // The filter configuration object we are associated with.  If
     // this value is null, this filter instance is not currently
     // configured. 
     private FilterConfig filterConfig = null;
-    
-    public DispatchController() {
-    }    
-    
+
+    public RoleFilter() {
+    }
+
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("DispatchController:DoBeforeProcessing");
+            log("RoleFilter:DoBeforeProcessing");
         }
 
         // Write code here to process the request and/or response before
@@ -64,12 +67,12 @@ public class DispatchController implements Filter {
 	    log(buf.toString());
 	}
          */
-    }    
-    
+    }
+
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("DispatchController:DoAfterProcessing");
+            log("RoleFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -103,36 +106,45 @@ public class DispatchController implements Filter {
     public void doFilter(ServletRequest request, ServletResponse response,
             FilterChain chain)
             throws IOException, ServletException {
-        
+
         if (debug) {
-            log("DispatchController:doFilter()");
+            log("RoleFilter:doFilter()");
         }
-        
+
         doBeforeProcessing(request, response);
-        
-        
-        HttpServletRequest req = (HttpServletRequest)request;
-        String uri = req.getRequestURI();
-        String url;
+
         Throwable problem = null;
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        String uri = httpRequest.getRequestURI();
+        String role;
         try {
-            // get site map
             ServletContext context = request.getServletContext();
-            Properties siteMap =
-                    (Properties) context.getAttribute("SITE_MAP");
+            Properties roleProp
+                    = (Properties) context.getAttribute("ROLE");
             //get resource name
             int lastIndex = uri.lastIndexOf("/");
             String resource = uri.substring(lastIndex + 1);
             //get site mapping
-            url = siteMap.getProperty(resource);
-            if (url != null) {
-                RequestDispatcher rd = req.getRequestDispatcher(url);
-                rd.forward(request, response);
+            role = roleProp.getProperty(resource);
+            HttpSession session = httpRequest.getSession(false);
+            if (role != null && role.equals("admin")) {
+                if (!((AccountDTO) session.getAttribute("USER")).isRole()) {
+                    ((HttpServletResponse) response).sendRedirect("homePage");
+                } else {
+                    chain.doFilter(request, response);
+                }
+            } else  {
+                //  ở đây role = "user" hoặc role = null
+                if (session != null && (AccountDTO) session.getAttribute("USER") != null) {
+                    if (((AccountDTO) session.getAttribute("USER")).isRole()) {
+                        ((HttpServletResponse) response).sendRedirect("adminDashboard");
+                    } else {
+                        chain.doFilter(request, response);
+                    }
+                } else {
+                    chain.doFilter(request, response);
+                }
             }
-            else {
-                ((HttpServletResponse) response).sendRedirect("homePage");
-            }
-            chain.doFilter(request, response);
         } catch (Throwable t) {
             // If an exception is thrown somewhere down the filter chain,
             // we still want to execute our after processing, and then
@@ -140,7 +152,7 @@ public class DispatchController implements Filter {
             problem = t;
             t.printStackTrace();
         }
-        
+
         doAfterProcessing(request, response);
 
         // If there was a problem, we want to rethrow it if it is
@@ -175,17 +187,17 @@ public class DispatchController implements Filter {
     /**
      * Destroy method for this filter
      */
-    public void destroy() {        
+    public void destroy() {
     }
 
     /**
      * Init method for this filter
      */
-    public void init(FilterConfig filterConfig) {        
+    public void init(FilterConfig filterConfig) {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
-            if (debug) {                
-                log("DispatchController:Initializing filter");
+            if (debug) {
+                log("RoleFilter:Initializing filter");
             }
         }
     }
@@ -196,27 +208,27 @@ public class DispatchController implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("DispatchController()");
+            return ("RoleFilter()");
         }
-        StringBuffer sb = new StringBuffer("DispatchController(");
+        StringBuffer sb = new StringBuffer("RoleFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());
     }
-    
+
     private void sendProcessingError(Throwable t, ServletResponse response) {
-        String stackTrace = getStackTrace(t);        
-        
+        String stackTrace = getStackTrace(t);
+
         if (stackTrace != null && !stackTrace.equals("")) {
             try {
                 response.setContentType("text/html");
                 PrintStream ps = new PrintStream(response.getOutputStream());
-                PrintWriter pw = new PrintWriter(ps);                
+                PrintWriter pw = new PrintWriter(ps);
                 pw.print("<html>\n<head>\n<title>Error</title>\n</head>\n<body>\n"); //NOI18N
 
                 // PENDING! Localize this for next official release
-                pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");                
-                pw.print(stackTrace);                
+                pw.print("<h1>The resource did not process correctly</h1>\n<pre>\n");
+                pw.print(stackTrace);
                 pw.print("</pre></body>\n</html>"); //NOI18N
                 pw.close();
                 ps.close();
@@ -233,7 +245,7 @@ public class DispatchController implements Filter {
             }
         }
     }
-    
+
     public static String getStackTrace(Throwable t) {
         String stackTrace = null;
         try {
@@ -247,9 +259,9 @@ public class DispatchController implements Filter {
         }
         return stackTrace;
     }
-    
+
     public void log(String msg) {
-        filterConfig.getServletContext().log(msg);        
+        filterConfig.getServletContext().log(msg);
     }
-    
+
 }
