@@ -1,20 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app version="3.1" xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd">
     <filter>
+        <filter-name>AuthenticationFilter</filter-name>
+        <filter-class>filters.AuthenticationFilter</filter-class>
+    </filter>
+    <filter>
         <filter-name>DispatchController</filter-name>
         <filter-class>filters.DispatchController</filter-class>
     </filter>
     <filter-mapping>
+        <filter-name>AuthenticationFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <filter-mapping>
         <filter-name>DispatchController</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+    <listener>
+        <description>ServletContextListener</description>
+        <listener-class>listeners.ContextListener</listener-class>
+    </listener>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
         <servlet-class>controller.LoginServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>RegistrationServlet</servlet-name>
+        <servlet-class>controller.RegistrationServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>RegistrationServlet</servlet-name>
+        <url-pattern>/RegistrationServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
@@ -27,4 +47,12 @@
         <res-auth>Container</res-auth>
         <res-sharing-scope>Shareable</res-sharing-scope>
     </resource-ref>
+    <context-param>
+        <param-name>SITEMAP_PROPERTIES_FILE_LOCATION</param-name>
+        <param-value>/WEB-INF/siteMap.properties</param-value>
+    </context-param>
+    <context-param>
+        <param-name>AUTHENTICATION_PROPERTIES_FILE_LOCATION</param-name>
+        <param-value>/WEB-INF/authentication.properties</param-value>
+    </context-param>
 </web-app>

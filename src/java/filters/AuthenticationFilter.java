@@ -9,18 +9,23 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
+import java.util.Properties;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse; 
+import javax.servlet.ServletResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Kim Nha
+ * @author long
  */
-public class DispatchController implements Filter {
+public class AuthenticationFilter implements Filter {
     
     private static final boolean debug = true;
 
@@ -29,13 +34,13 @@ public class DispatchController implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public DispatchController() {
+    public AuthenticationFilter() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("DispatchController:DoBeforeProcessing");
+            log("AuthenticationFilter:DoBeforeProcessing");
         }
 
         // Write code here to process the request and/or response before
@@ -63,7 +68,7 @@ public class DispatchController implements Filter {
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("DispatchController:DoAfterProcessing");
+            log("AuthenticationFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -99,14 +104,35 @@ public class DispatchController implements Filter {
             throws IOException, ServletException {
         
         if (debug) {
-            log("DispatchController:doFilter()");
+            log("AuthenticationFilter:doFilter()");
         }
         
         doBeforeProcessing(request, response);
         
         Throwable problem = null;
+        HttpServletRequest httpRequest = (HttpServletRequest)request;
+        String uri = httpRequest.getRequestURI();
         try {
-            chain.doFilter(request, response);
+            //get resource name
+            int lastIndex = uri.lastIndexOf("/");
+            String resource = uri.substring(lastIndex + 1);
+            // get authentication properties
+            ServletContext context = request.getServletContext();
+            Properties authProperties = 
+                    (Properties) context.getAttribute("AUTHENTICATION_LIST");
+            HttpSession session = httpRequest.getSession(false);
+            // check resource authentication
+            String rule = (String) authProperties.getProperty(resource);
+            if (rule != null && rule.equals("restricted")) {
+                if(session == null || session.getAttribute("USER") == null) {
+                    ((HttpServletResponse) response).sendRedirect("loginPage");
+                }
+                else {
+                      chain.doFilter(request, response);
+                }
+            } else {
+                    chain.doFilter(request, response);
+            }
         } catch (Throwable t) {
             // If an exception is thrown somewhere down the filter chain,
             // we still want to execute our after processing, and then
@@ -159,7 +185,7 @@ public class DispatchController implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {                
-                log("DispatchController:Initializing filter");
+                log("AuthenticationFilter:Initializing filter");
             }
         }
     }
@@ -170,9 +196,9 @@ public class DispatchController implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("DispatchController()");
+            return ("AuthenticationFilter()");
         }
-        StringBuffer sb = new StringBuffer("DispatchController(");
+        StringBuffer sb = new StringBuffer("AuthenticationFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());
