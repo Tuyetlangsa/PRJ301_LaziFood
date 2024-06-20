@@ -14,5 +14,7 @@
     <body>
         <h1>Hello World! JSP</h1>
         <a href="loginPage">Click here to login</a>
+        <a href="registrationPage">Register</a>
+
     </body>
 </html>
