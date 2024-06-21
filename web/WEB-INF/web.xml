@@ -22,15 +22,15 @@
     </listener>
     <servlet>
         <servlet-name>LoginServlet</servlet-name>
-        <servlet-class>controller.LoginServlet</servlet-class>
+        <servlet-class>controllers.LoginServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>RegistrationServlet</servlet-name>
-        <servlet-class>controller.RegistrationServlet</servlet-class>
+        <servlet-class>controllers.RegistrationServlet</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>ViewHomePageServlet</servlet-name>
-        <servlet-class>controller.ViewHomePageServlet</servlet-class>
+        <servlet-class>controllers.ViewHomePageServlet</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>

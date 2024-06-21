@@ -6,18 +6,19 @@
             <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/web/registration.jsp</file>
             <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/src/java/listeners/ContextListener.java</file>
             <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/web/WEB-INF/web.xml</file>
-            <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/src/java/controller/RegistrationServlet.java</file>
+            <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/web/dashboard.jsp</file>
             <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/web/homepage.jsp</file>
+            <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/src/java/controllers/LoginServlet.java</file>
             <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/src/java/utils/PropertiesFileUtil.java</file>
             <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/src/java/utils/DBUtil.java</file>
+            <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/src/java/controllers/RegistrationServlet.java</file>
             <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/web/META-INF/context.xml</file>
             <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/web/login.html</file>
+            <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/src/java/controllers/ViewHomePageServlet.java</file>
             <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/web/WEB-INF/siteMap.properties</file>
             <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/src/java/table/accounts/AccountDAO.java</file>
-            <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/src/java/controller/LoginServlet.java</file>
             <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/src/java/filters/DispatchController.java</file>
             <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/web/login.jsp</file>
-            <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/src/java/controller/ViewHomePageServlet.java</file>
             <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/web/WEB-INF/authentication.properties</file>
             <file>file:/D:/FPT_UNIVERSITY/PRJ301_LaziFood/src/java/filters/AuthenticationFilter.java</file>
         </group>
