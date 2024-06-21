@@ -131,6 +131,7 @@ public class DispatchController implements Filter {
             }
             else {
                 ((HttpServletResponse) response).sendRedirect("homePage");
+                
             }
             chain.doFilter(request, response);
         } catch (Throwable t) {

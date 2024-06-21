@@ -58,10 +58,12 @@
                 if (password !== confirmPassword) {
                     // Show error message
                     document.getElementById("confirmPasswordError").innerText = "Passwords do not match";
+                    document.getElementById("submitBtn").disabled = true;
                     return false; // Prevent form submission
                 } else {
                     // Clear error message
                     document.getElementById("confirmPasswordError").innerText = "";
+                    document.getElementById("submitBtn").disabled = false;
                     return true; // Allow form submission
                 }
             }
@@ -70,7 +72,7 @@
     <body>
         <div class="container">
             <h2>Registration Form</h2>
-            <form action="registrationAction" method="POST" >
+            <form action="registrationAction" method="POST">
                 <div class="form-group">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="txtUsername" required>
@@ -97,7 +99,7 @@
                     <input type="text" id="phone" name="txtPhone" required>
                 </div>
                 <div class="form-group">
-                    <input type="submit" value="register">
+                    <input type="submit" id="submitBtn" value="register" disabled>
                 </div>
             </form>
             <p>${requestScope.Error}</p>

@@ -1,6 +1,6 @@
 <%-- 
-    Document   : homepage
-    Created on : 20-06-2024, 09:21:44
+    Document   : dashboard
+    Created on : 20-06-2024, 22:21:22
     Author     : long
 --%>
 
@@ -12,8 +12,6 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World! JSP</h1>
-        <a href="loginPage">Click here to login</a>
-        <a href="registrationPage">Register</a>
+        <h1>DashBoard</h1>
     </body>
 </html>
