@@ -14,13 +14,10 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World! JSP</h1>
         <a href="loginPage">Click here to login</a>
         <a href="registrationPage">Register</a><br/>
-        <c:forEach var = "ingredientCategory" items ="${requestScope.LIST_INGREDIENT_CATEGORIES}">
-            <c:out value="${ingredientCategory.name}"/><br/>
-        </c:forEach>
-        <c:out value="${requestScope.CHECK}"/>
-
+        <jsp:include page ="navigation.jsp"/>
+        <jsp:include page="footer.jsp"/>
     </body>
+    
 </html>

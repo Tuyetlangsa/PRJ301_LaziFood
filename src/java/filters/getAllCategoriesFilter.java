@@ -9,24 +9,28 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.io.PrintWriter;
 import java.io.StringWriter;
-import java.util.Properties;
+import java.util.List;
+import javax.servlet.DispatcherType;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse; 
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.ServletResponse;
+import javax.servlet.annotation.WebFilter;
+import table.dishCategories.DishCategoriesDAO;
+import table.dishCategories.DishCategoriesDTO;
+import table.ingredientCategories.IngredientCategoriesDAO;
+import table.ingredientCategories.IngredientCategoriesDTO;
+import table.menuCategories.MenuCategoriesDAO;
+import table.menuCategories.MenuCategoriesDTO;
 
 /**
  *
- * @author Kim Nha
+ * @author long
  */
-public class DispatchController implements Filter {
+@WebFilter(filterName = "getAllCategoriesFilter", urlPatterns = {"/*"}, dispatcherTypes = {DispatcherType.REQUEST})
+public class getAllCategoriesFilter implements Filter {
     
     private static final boolean debug = true;
 
@@ -35,13 +39,13 @@ public class DispatchController implements Filter {
     // configured. 
     private FilterConfig filterConfig = null;
     
-    public DispatchController() {
+    public getAllCategoriesFilter() {
     }    
     
     private void doBeforeProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("DispatchController:DoBeforeProcessing");
+            log("getAllCategoriesFilter:DoBeforeProcessing");
         }
 
         // Write code here to process the request and/or response before
@@ -69,7 +73,7 @@ public class DispatchController implements Filter {
     private void doAfterProcessing(ServletRequest request, ServletResponse response)
             throws IOException, ServletException {
         if (debug) {
-            log("DispatchController:DoAfterProcessing");
+            log("getAllCategoriesFilter:DoAfterProcessing");
         }
 
         // Write code here to process the request and/or response after
@@ -105,41 +109,29 @@ public class DispatchController implements Filter {
             throws IOException, ServletException {
         
         if (debug) {
-            log("DispatchController:doFilter()");
+            log("getAllCategoriesFilter:doFilter()");
         }
         
         doBeforeProcessing(request, response);
         
-        
-        HttpServletRequest req = (HttpServletRequest)request;
-        String uri = req.getRequestURI();
-        String url;
         Throwable problem = null;
         try {
-            // get site map
-            //khong chan css & images
-           
-            ServletContext context = request.getServletContext();
-            Properties siteMap =
-                    (Properties) context.getAttribute("SITE_MAP");
-            //get resource name
-            int lastIndex = uri.lastIndexOf("/");
-            String resource = uri.substring(lastIndex + 1);
-            //khong chan css & images
-            if (resource.contains(".css") || resource.contains(".png")) {
-                chain.doFilter(request, response);
-            }
-            //get site mapping
-            url = siteMap.getProperty(resource);
-            if (url != null) {
-                RequestDispatcher rd = req.getRequestDispatcher(url);
-                rd.forward(request, response);
-            }
-            else {
-                ((HttpServletResponse) response).sendRedirect("viewHomePageAction");
-//                 ((HttpServletRequest) request).getRequestDispatcher("homePage").forward(request, response);                
-            }
-//            chain.doFilter(request, response);
+            IngredientCategoriesDAO ingDao = new IngredientCategoriesDAO();
+            ingDao.getAllIngredientCategories();
+            List<IngredientCategoriesDTO> listIngrCategories = ingDao.getListDTO();
+            // get list menu categories
+            MenuCategoriesDAO menuDao = new MenuCategoriesDAO();
+            menuDao.getAllMenuCategories();
+            List<MenuCategoriesDTO> listMenuCategories = menuDao.getListDTO();
+            DishCategoriesDAO dishDao = new DishCategoriesDAO();
+            dishDao.getAllMenuCategories();
+            List<DishCategoriesDTO> listDishCategories = dishDao.getListDTO();
+            // set list categories into request scope
+            
+            request.setAttribute("LIST_INGREDIENT_CATEGORIES", listIngrCategories);
+            request.setAttribute("LIST_MENU_CATEGORIES", listMenuCategories);
+            request.setAttribute("LIST_DISH_CATEGORIES", listDishCategories);
+            chain.doFilter(request, response);
         } catch (Throwable t) {
             // If an exception is thrown somewhere down the filter chain,
             // we still want to execute our after processing, and then
@@ -192,7 +184,7 @@ public class DispatchController implements Filter {
         this.filterConfig = filterConfig;
         if (filterConfig != null) {
             if (debug) {                
-                log("DispatchController:Initializing filter");
+                log("getAllCategoriesFilter:Initializing filter");
             }
         }
     }
@@ -203,9 +195,9 @@ public class DispatchController implements Filter {
     @Override
     public String toString() {
         if (filterConfig == null) {
-            return ("DispatchController()");
+            return ("getAllCategoriesFilter()");
         }
-        StringBuffer sb = new StringBuffer("DispatchController(");
+        StringBuffer sb = new StringBuffer("getAllCategoriesFilter(");
         sb.append(filterConfig);
         sb.append(")");
         return (sb.toString());
