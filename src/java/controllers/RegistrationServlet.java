@@ -43,20 +43,18 @@ public class RegistrationServlet extends HttpServlet {
         String email = request.getParameter("txtEmail");
         String fullName = request.getParameter("txtFullName");
         String phone = request.getParameter("txtPhone");
-        String url = "homepage.jsp";
+        String url = "registration.jsp";
         try (PrintWriter out = response.getWriter()) {
             AccountDAO dao = new AccountDAO();
-            AccountDTO dto = dao.getAccount(userName, passWord);
-            
-            if (dto != null) {
-                request.setAttribute("Error", "Username has been existed");
+            boolean check = dao.checkExistAccount(userName);
+            if (check) {
+                request.setAttribute("Error", "Tài khoản đã tồn tại.");
             }
             else {
                 boolean result = dao.insertAccount(userName, passWord, fullName, email, phone);
                 
                 if (result) {
-                    url = "login.jsp";
-                    
+                    url = "login.jsp";                    
                 }
             }
             RequestDispatcher rd = request.getRequestDispatcher(url);

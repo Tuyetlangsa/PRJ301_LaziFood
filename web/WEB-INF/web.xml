@@ -21,7 +21,10 @@
         <filter-name>DispatchController</filter-name>
         <filter-class>filters.DispatchController</filter-class>
     </filter>
- 
+    <filter>
+        <filter-name>getAllCategoriesFilter</filter-name>
+        <filter-class>filters.getAllCategoriesFilter</filter-class>
+    </filter>
     <filter-mapping>
         <filter-name>EncodeUTF8Filter</filter-name>
         <url-pattern>/*</url-pattern>
@@ -36,7 +39,12 @@
         <filter-name>DispatchController</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
+    <filter-mapping>
+        <filter-name>getAllCategoriesFilter</filter-name>
+        <url-pattern>/homepage.jsp</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+        <dispatcher>FORWARD</dispatcher>
+    </filter-mapping>
     <listener>
         <description>ServletContextListener</description>
         <listener-class>listeners.ContextListener</listener-class>
@@ -53,6 +61,10 @@
         <servlet-name>ViewHomePageServlet</servlet-name>
         <servlet-class>controllers.ViewHomePageServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>GetProductByCategory</servlet-name>
+        <servlet-class>controllers.GetProductByCategory</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -64,6 +76,10 @@
     <servlet-mapping>
         <servlet-name>ViewHomePageServlet</servlet-name>
         <url-pattern>/ViewHomePageServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>GetProductByCategory</servlet-name>
+        <url-pattern>/GetProductByCategory</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
