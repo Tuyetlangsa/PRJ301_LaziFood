@@ -5,6 +5,7 @@
  */
 package table.accounts;
 
+import java.io.Serializable;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -15,7 +16,7 @@ import utils.DBUtil;
  *
  * @author long
  */
-public class AccountDAO {
+public class AccountDAO implements Serializable {
 
     public AccountDTO getAccount(String username, String password) throws SQLException {
         Connection cn = null;
@@ -93,5 +94,8 @@ public class AccountDAO {
         }
         return false;
     }
-
+    
+            
+    
+            
 }

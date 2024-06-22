@@ -12,6 +12,8 @@
         <title>JSP Page</title>
     </head>
     <body>
-        <h1>Hello World! Login</h1>
+        <h1>Hello World! Login người lạ ơi</h1>
+        <p>${requestScope.TEST}</p>
+
     </body>
 </html>

@@ -72,7 +72,7 @@
     <body>
         <div class="container">
             <h2>Registration Form</h2>
-            <form action="registrationAction" method="POST">
+            <form action="registrationAction" method="POST" accept-charset="UTF-8">
                 <div class="form-group">
                     <label for="username">Username:</label>
                     <input type="text" id="username" name="txtUsername" required>
@@ -103,5 +103,7 @@
                 </div>
             </form>
             <p>${requestScope.Error}</p>
+            <p>${requestScope.TEST}</p>
+
     </body>
 </html>

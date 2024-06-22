@@ -4,6 +4,8 @@
     Author     : long
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -14,6 +16,11 @@
     <body>
         <h1>Hello World! JSP</h1>
         <a href="loginPage">Click here to login</a>
-        <a href="registrationPage">Register</a>
+        <a href="registrationPage">Register</a><br/>
+        <c:forEach var = "ingredientCategory" items ="${requestScope.LIST_INGREDIENT_CATEGORIES}">
+            <c:out value="${ingredientCategory.name}"/><br/>
+        </c:forEach>
+        <c:out value="${requestScope.CHECK}"/>
+
     </body>
 </html>
