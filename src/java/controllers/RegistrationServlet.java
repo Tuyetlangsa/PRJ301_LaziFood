@@ -36,13 +36,14 @@ public class RegistrationServlet extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException, SQLException {
+//        request.setCharacterEncoding("UTF-8");
         response.setContentType("text/html;charset=UTF-8");
         String userName = request.getParameter("txtUsername");
         String passWord = request.getParameter("txtPassword");
         String email = request.getParameter("txtEmail");
         String fullName = request.getParameter("txtFullName");
         String phone = request.getParameter("txtPhone");
-        String url = "registration.jsp";
+        String url = "homepage.jsp";
         try (PrintWriter out = response.getWriter()) {
             AccountDAO dao = new AccountDAO();
             AccountDTO dto = dao.getAccount(userName, passWord);
@@ -54,7 +55,8 @@ public class RegistrationServlet extends HttpServlet {
                 boolean result = dao.insertAccount(userName, passWord, fullName, email, phone);
                 
                 if (result) {
-                    url = "login.html";
+                    url = "login.jsp";
+                    
                 }
             }
             RequestDispatcher rd = request.getRequestDispatcher(url);
